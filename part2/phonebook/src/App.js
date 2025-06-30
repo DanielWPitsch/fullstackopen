@@ -14,6 +14,7 @@ const App = () => {
     e.preventDefault();
     const nameExists = persons.some(person => person.name === newName);
     if(nameExists){
+      //already did it
       alert(`${newName} is already added to the phonebook`);
       return;
     }
