@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Filter, PersonForm, Persons} from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,11 +12,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('');
 
-  const addName = (e) => {
+  const handleNameChange = (e) => setNewName(e.target.value)
+  const handleNumberChange = (e) => setNewNumber(e.target.value)
+  const handleFilterChange = (e) => setFilter(e.target.value)
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const nameExists = persons.some(person => person.name === newName);
     if(nameExists){
-      //already did it
       alert(`${newName} is already added to the phonebook`);
       return;
     }
@@ -29,37 +33,19 @@ const App = () => {
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <h2>Search</h2>
-        <input
-          type="text"
-          placeholder="Search by name"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-      </div>
-      <form onSubmit={addName}>
-        <div style={{ display: "flex", flexDirection: "column", width: "13%"}}>
-          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
-          number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
-        </div>
-
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
+      <PersonForm
+        newName = {newName}
+        newNumber = {newNumber}
+        handleNameChange = {handleNameChange}
+        handleNumberChange = {handleNumberChange}
+        handleSubmit = {handleSubmit}      
+      />
       <h2>Numbers</h2>
-      <ul>
-        {filteredPersons.map((person, index) => (
-          <li key={index}>{person.name} - {person.number}</li>
-        ))}
-      </ul>
-
+      <Persons persons={filteredPersons} />
     </div>
   )
 }
